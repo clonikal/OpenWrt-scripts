@@ -11,7 +11,7 @@ BOT_TOKEN=0123456789:ABCDEFGHIJKLMNIOPQRSTUVWXYZ
 [[ -f /tmp/currentip ]] || touch /tmp/currentip
 
 # Comprueba si hay cambio de IP y manda mensaje en caso afirmativo
-current_ip=`wget -qO- http://ipecho.net/plain`
+current_ip=`wget -4qO- http://ipecho.net/plain`
 old_ip=`cat /tmp/currentip`
 
 if [ "$current_ip" != "$old_ip" ]; then
