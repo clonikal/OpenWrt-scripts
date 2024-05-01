@@ -13,8 +13,8 @@ if [ ! -f /usr/bin/curl ]; then
   exit 1
 fi
 
-# Crea el fichero /tmp/currentip si no existe
-[[ -f /tmp/currentip ]] || touch /tmp/currentip
+# Crea el fichero /root/currentip.wan si no existe
+[[ -f /root/currentip.wan ]] || touch /root/currentip.wan
 
 # Comprueba la IP(v4) actual
 current_ip=`wget -4qO- http://ipecho.net/plain`
@@ -28,7 +28,7 @@ if [ "$current_ip" == "" ]; then
 fi
 
 # IP anterior
-old_ip=`cat /tmp/currentip`
+old_ip=`cat /root/currentip.wan`
 
 # Compara si hay cambio de IP y manda mensaje en caso afirmativo
 if [ "$current_ip" != "$old_ip" ]; then
@@ -41,7 +41,7 @@ if [ "$current_ip" != "$old_ip" ]; then
   --data "parse_mode=HTML" \
   --data "text=$MESSAGE" \
   --data "chat_id="$GROUP_ID 'https://api.telegram.org/bot'$BOT_TOKEN'/sendMessage' > /dev/null
-  echo $current_ip>/tmp/currentip # Actualizo el archivo con la IP actual
+  echo $current_ip>/root/currentip.wan # Actualizo el archivo con la IP actual
 else
   # Grabo en log para saber que esta funcionando. Comenta la siguiente linea si no lo necesitas
   echo `date +"[%F %T]"` "La IP no ha cambiado. Actual: $current_ip" >> /tmp/log/notify_ip.log
