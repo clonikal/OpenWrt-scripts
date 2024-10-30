@@ -32,11 +32,13 @@ old_ip=`cat /root/currentip.wan`
 
 # Compara si hay cambio de IP y manda mensaje en caso afirmativo
 if [ "$current_ip" != "$old_ip" ]; then
+  # Selecciona el modelo del dispositivo para identificarlo
+  model=`dmesg | grep Machine | sed 's/.*Machine model: //'`
   # Grabo en log el cambio de IP. Comenta la siguiente linea si no lo necesitas
   echo `date +"[%F %T]"` "La nueva IP es: $current_ip" >> /tmp/log/notify_ip.log
   # Notifico por Telegram
   EMOJI=$'\xE2\x9A\xA0' # Simbolo de warning
-  MESSAGE="${EMOJI} <b>Cambio de IP</b>%0A`date +"[%F %T]"` La nueva IP es: <i>$current_ip</i>"
+  MESSAGE="${EMOJI} <b>Cambio de IP en $model</b>%0A`date +"[%F %T]"` La nueva IP es: <i>$current_ip</i>"
   curl -s \
   --data "parse_mode=HTML" \
   --data "text=$MESSAGE" \
